@@ -1,3 +1,4 @@
+
 "use client";
 
 import { use, useEffect, useState } from "react";
@@ -45,9 +46,9 @@ const Page = ({ params }) => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center p-6">
-        <div className="flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">
-          <div className="h-4 w-4 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin"></div>
+      <div className="flex min-h-[400px] items-center justify-center bg-[#faf8f7] p-6">
+        <div className="flex items-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-medium text-stone-500 shadow-sm ring-1 ring-stone-100">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-rose-400 border-t-transparent"></div>
           Loading product details...
         </div>
       </div>
@@ -56,9 +57,14 @@ const Page = ({ params }) => {
 
   if (!productId) {
     return (
-      <div className="mx-auto max-w-md p-6 text-center">
-        <div className="rounded-xl border border-red-100 bg-red-50 p-6 text-red-600 shadow-sm">
-          <p className="font-semibold">Product not found.</p>
+      <div className="flex min-h-[400px] items-center justify-center bg-[#faf8f7] p-6">
+        <div className="w-full max-w-md rounded-3xl border border-rose-100 bg-white p-10 text-center shadow-sm">
+          <p className="text-xl font-bold text-stone-800">
+            Product not found.
+          </p>
+          <p className="mt-2 text-sm text-stone-500">
+            Sorry, we couldn't find this product.
+          </p>
         </div>
       </div>
     );
@@ -69,84 +75,218 @@ const Page = ({ params }) => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-6 md:p-8">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-h-screen bg-[#faf8f7] text-[#292524]">
 
-        <div className="grid grid-cols-1 gap-10 p-6 md:grid-cols-2 md:p-10">
-          <div className="flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50 p-6">
-            <img
-              src={product.thumbnail}
-              alt={product.title}
-              className="h-64 w-64 object-contain drop-shadow-sm transition-transform duration-300 hover:scale-105"
-            />
+      {/* NAVIGATION */}
+      <header className="border-b border-rose-100/70 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <h1
+            onClick={() => router.push("/")}
+            className="cursor-pointer text-2xl font-extrabold tracking-tight"
+          >
+            shop<span className="text-rose-400">.</span>
+          </h1>
+
+          <div className="flex items-center gap-6 text-sm font-medium text-stone-500">
+            <a href="/" className="transition hover:text-rose-400">
+              Home
+            </a>
+            <a href="/#products" className="text-rose-400">
+              Products
+            </a>
           </div>
 
-          <div className="flex flex-col justify-center space-y-4">
-            {product.category && (
-              <span className="w-fit rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">
-                {product.category}
-              </span>
-            )}
+          <span className="hidden rounded-full bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-500 sm:block">
+            Discover something new
+          </span>
+        </div>
+      </header>
 
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-900">
-              {product.title}
-            </h1>
+      <main className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
 
-            <div className="flex items-center gap-3">
-              {typeof product.price === "number" && (
-                <span className="text-2xl font-bold text-slate-900">
-                  ${product.price.toFixed(2)}
-                </span>
-              )}
-              {typeof product.rating === "number" && (
-                <span className="flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-medium text-amber-600">
-                  ★ {product.rating.toFixed(1)}
-                </span>
-              )}
-            </div>
-
-            <p className="text-base leading-relaxed text-slate-600">
-              {product.description}
-            </p>
-          </div>
+        {/* BREADCRUMB */}
+        <div className="mb-8 flex items-center gap-2 text-sm text-stone-400">
+          <a href="/" className="transition hover:text-rose-400">
+            Home
+          </a>
+          <span>/</span>
+          <a href="/#products" className="transition hover:text-rose-400">
+            Products
+          </a>
+          <span>/</span>
+          <span className="max-w-[150px] truncate font-medium text-stone-700">
+            {product.title}
+          </span>
         </div>
 
-        {relatedProducts.length > 0 && (
-          <div className="border-t border-slate-100 bg-slate-50/60 p-6 md:p-8">
-            <h2 className="mb-5 text-xl font-bold tracking-tight text-slate-800">
-              Related Products
-            </h2>
+        {/* PRODUCT DETAILS */}
+        <div className="overflow-hidden rounded-[2rem] border border-stone-100 bg-white shadow-sm">
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              {relatedProducts.map((related) => (
-                <div
-                  key={related.id}
-                  onClick={() => handleRedirect(related.id)}
-                  className="group flex cursor-pointer items-center gap-4 rounded-xl border border-slate-200/80 bg-white p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md"
-                >
-                  <div className="shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                    <img
-                      src={related.thumbnail}
-                      alt={related.title}
-                      className="h-14 w-14 object-cover transition-transform duration-200 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-slate-800 group-hover:text-indigo-600">
-                      {related.title}
-                    </p>
-                    {typeof related.price === "number" && (
-                      <p className="text-sm text-slate-500">
-                        ${related.price.toFixed(2)}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
+          <div className="grid grid-cols-1 gap-10 p-6 sm:p-10 md:grid-cols-2 md:gap-14 md:p-14">
+
+            {/* PRODUCT IMAGE */}
+            <div className="relative flex min-h-[350px] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#f5f3f0] p-8 sm:min-h-[450px]">
+
+              <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-rose-200/30 blur-3xl" />
+
+              <img
+                src={product.thumbnail}
+                alt={product.title}
+                className="relative z-10 h-full max-h-[400px] w-full object-contain drop-shadow-sm transition-transform duration-500 hover:scale-110"
+              />
+
+              {product.discountPercentage > 0 && (
+                <span className="absolute left-5 top-5 z-20 rounded-full bg-rose-400 px-4 py-2 text-xs font-bold text-white">
+                  -{Math.round(product.discountPercentage)}% OFF
+                </span>
+              )}
+
+            </div>
+
+            {/* PRODUCT INFORMATION */}
+            <div className="flex flex-col justify-center py-4">
+
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.25em] text-rose-400">
+                Carefully selected for you
+              </p>
+
+              {product.category && (
+                <span className="mb-5 w-fit rounded-full bg-rose-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-rose-500">
+                  {product.category}
+                </span>
+              )}
+
+              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-stone-900 sm:text-4xl lg:text-5xl">
+                {product.title}
+              </h1>
+
+              {/* PRICE AND RATING */}
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+
+                {typeof product.price === "number" && (
+                  <span className="text-3xl font-extrabold tracking-tight text-stone-900">
+                    ${product.price.toFixed(2)}
+                  </span>
+                )}
+
+                {typeof product.rating === "number" && (
+                  <span className="flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-600">
+                    ★ {product.rating.toFixed(1)}
+                  </span>
+                )}
+
+              </div>
+
+              <div className="my-8 h-px bg-stone-100" />
+
+              {/* DESCRIPTION */}
+              <div>
+                <h2 className="mb-3 text-sm font-bold uppercase tracking-widest text-stone-800">
+                  Product description
+                </h2>
+
+                <p className="text-base leading-8 text-stone-500">
+                  {product.description}
+                </p>
+              </div>
+
+              {/* DECORATIVE DETAILS */}
+              <div className="mt-9 rounded-2xl bg-[#faf8f7] p-5">
+                <p className="text-sm font-semibold text-stone-800">
+                  A little something special ♡
+                </p>
+                <p className="mt-2 text-sm leading-6 text-stone-500">
+                  Explore more products from our carefully selected collection.
+                </p>
+              </div>
+
             </div>
           </div>
-        )}
-      </div>
+
+          {/* RELATED PRODUCTS */}
+          {relatedProducts.length > 0 && (
+            <div className="border-t border-stone-100 bg-[#faf8f7] px-6 py-12 sm:px-10 md:px-14">
+
+              <div className="mb-8">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-rose-400">
+                  You might also like
+                </p>
+
+                <h2 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-3xl">
+                  Related products
+                </h2>
+
+                <p className="mt-2 text-sm text-stone-500">
+                  More things you might fall in love with.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                {relatedProducts.map((related) => (
+                  <div
+                    key={related.id}
+                    onClick={() => handleRedirect(related.id)}
+                    className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-stone-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-lg hover:shadow-rose-100/40"
+                  >
+
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f5f3f0] p-2">
+
+                      <img
+                        src={related.thumbnail}
+                        alt={related.title}
+                        className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                      />
+
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+
+                      <p className="truncate text-sm font-bold text-stone-800 transition-colors group-hover:text-rose-400">
+                        {related.title}
+                      </p>
+
+                      {typeof related.price === "number" && (
+                        <p className="mt-2 text-sm font-semibold text-stone-500">
+                          ${related.price.toFixed(2)}
+                        </p>
+                      )}
+
+                      <p className="mt-2 text-xs font-medium text-rose-400">
+                        View product →
+                      </p>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="mt-12 border-t border-stone-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-9 sm:flex-row">
+
+          <h2 className="text-xl font-extrabold tracking-tight">
+            shop<span className="text-rose-400">.</span>
+          </h2>
+
+          <p className="text-xs text-stone-400">
+            © 2026 shop. All rights reserved.
+          </p>
+
+          <p className="text-xs text-stone-400">
+            Made with care ♡
+          </p>
+
+        </div>
+      </footer>
+
     </div>
   );
 };
